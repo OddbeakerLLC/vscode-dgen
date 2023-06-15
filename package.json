@@ -1,0 +1,46 @@
+{
+  "name": "dgen",
+  "displayName": "DGen Bootstrap Modal Generator",
+  "description": "Generates Bootstrap HTML and handler object from a very simple markup notation. Select the ",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.78.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "dgen.selectionToModal",
+        "title": "DGen Selection to Modal"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "dgen.selectionToModal",
+        "key": "alt+shift+d",
+        "mac": "alt+shift+d",
+        "when": "editorTextFocus && editorHasSelection"
+      }
+    ]
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "node ./test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.78.0",
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "20.2.5",
+    "eslint": "^8.41.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "typescript": "^5.1.3",
+    "@vscode/test-electron": "^2.3.2"
+  }
+}
