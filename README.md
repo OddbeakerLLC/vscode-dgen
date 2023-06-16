@@ -1,16 +1,66 @@
-# dgen-bootstrap-modal-generator README
+# DGen Bootstrap Dialog Generator
+## From Oddbeaker LLC
 
-This is the README for your extension "dgen-bootstrap-modal-generator". After writing up a brief description, we recommend including the following sections.
+Converts a simple "DGen" markup to a Bootstrap modal dialog and a javascript object that can hide, display, populate and fetch all form field data. Here is an example of DGen that contains all form field types:
 
-## Features
+    <{User Information}>
+    <{Please fill in the information below:}>
+    <{First Name:}{[T:firstName,50]}>
+    <{Age:}{[N:age,18,100]}>
+    <{Height (in meters):}{[F:height,1.0,2.5]}>
+    <{Password:}{[P:password,50]}>
+    <{Bio:}{[A:bio,5]}>
+    <{Interests:}
+    {[X:reading] Reading}
+    {[X:travel] Travel}
+    {[X:cooking] Cooking}>
+    <{Gender:}
+    {[R:gender1,gender,male] Male}
+    {[R:gender2,gender,female] Female}
+    {[R:gender3,gender,other] Other}>
+    <{Preferred Language:}
+    {[D:language]}>
+    <{[B:cancelButton,Cancel][B:saveButton,Save]}>
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+The above DGen notation will produce this:
 
-For example if there is an image subfolder under your extension project workspace:
+![feature X](vscode-dgen.png)
 
-\!\[feature X\]\(images/feature-x.png\)
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## Instructions
+
+1. Type your DGen directly into your HTML file, at the point where you want the code generated. 
+2. Select the block of DGen text.
+3. Press Alt-Shift-D and POOF! Instant modal dialog with all the code to handle it.
+4. Style your generated HTML as needed.
+5. Fill in your change and click handlers as needed.
+
+That's it!
+
+## DGen notation reference
+
+- Rows are marked with "<" and ">".
+- Columns are marked with "{" and "}".
+- Form fields are marked with "[" and "]".
+- Any text within a column is copied as it appears.
+- The first row of the dialog must have a single column with title that will be used to calculate the dialog and object names. For example:
+
+    <{User Information}>
+
+- The last row of the dialog will become the footer. It must have a single column containing buttons such as the Save and Cancel buttons. For example:
+
+    <{[B:cancelButton,Cancel][B:saveButton,Save]}>
+
+## DGen field reference
+- **[A:id,rows]** - Textarea with "rows" rows, whose ID is "id"
+- **[B:id,label]** - Button with ID and label.
+- **[D:id]** - Dropdown list whose ID is "id"
+- **[F:id,min,max]** - Number field with ID and min, max values.
+- **[N:id,min,max]** - Integer field with ID and min, max values.
+- **[P:id,length]** - Password field with ID and maxlength.
+- **[R:id,group,value]** - Radio button with ID, group, value.
+- **[T:id,length]** - Text field whose ID is "id" and maxlength is "length".
+- **[X:id]** - Checkbox with ID 
 
 ## Requirements
 

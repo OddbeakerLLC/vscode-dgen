@@ -2,7 +2,7 @@ const vscode = require('vscode');
 const dgen = require('./dgen.js').dgen;
 
 function activate(context) {
-  let disposable = vscode.commands.registerCommand('dgen.selectionToModal', () => {
+  let disposable = vscode.commands.registerCommand('dgen.selectionToModal', async () => {
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
       return;

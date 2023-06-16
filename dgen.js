@@ -14,15 +14,16 @@ dgen.getCode = (content) => {
   dialogName = toCamelCase(dialogTitle);
 
   // initialize the dialog
-  output = `<div class="modal" tabindex="-1" role="dialog" id="${dialogName}Modal"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">${dialogTitle}</h5></div><div class="modal-body">`;
+  output = `<div class="modal" tabindex="-1" role="dialog" id="${dialogName}Modal" data-backdrop="static"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">${dialogTitle}</h5></div><div class="modal-body">`;
 
   // render rows
-  for (let row of rows) {
-    output += `<div class="row">`;
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    output += (i < rows.length - 1) ? `<div class="row">` : `</div>`;
     // extract columns
     let columns = getColumns(row);
     for (let column of columns) {
-      output += `<div class="col">`;
+      output += (i < rows.length - 1) ? `<div class="col">` : `<div class="modal-footer">`;
       // render fields
       let fields = getFields(column);
       for (let field of fields) {
@@ -32,10 +33,10 @@ dgen.getCode = (content) => {
       output += `${column}`;
       output += `</div>`;
     }
-    output += `</div>`;
+    output += (i < rows.length - 1) ? `</div>` : ``;
   }
   // finish off the html
-  output += `</div></div></div></div>`;
+  output += `</div></div></div></div>\n`;
 
   // now generate the dialog object
   output += `<script>\n${renderCode(dialogName, allFields)}\n</script>`;
@@ -82,31 +83,31 @@ function renderField(field) {
 
   switch (fieldType) {
     case 'T': // Text input
-      return `<input type="text" id="${params[0]}" class="form-control" maxlength="${params[1]}" onchange="${dialogName}Dialog.${params[0]}OnChange">`;
+      return `<input type="text" id="${dialogName}Dialog_${params[0]}" class="form-control" maxlength="${params[1]}" onchange="${dialogName}Dialog.${params[0]}OnChange(this)">`;
 
     case 'N': // Integer input
-      return `<input type="number" id="${params[0]}" class="form-control" min="${params[1]}" max="${params[2]}" onchange="${dialogName}Dialog.${params[0]}OnChange">`;
+      return `<input type="number" id="${dialogName}Dialog_${params[0]}" class="form-control" min="${params[1]}" max="${params[2]}" onchange="${dialogName}Dialog.${params[0]}OnChange(this)">`;
 
     case 'F': // Float input
-      return `<input type="number" id="${params[0]}" class="form-control" step="0.01" min="${params[1]}" max="${params[2]}" onchange="${dialogName}Dialog.${params[0]}OnChange">`;
+      return `<input type="number" id="${dialogName}Dialog_${params[0]}" class="form-control" step="0.01" min="${params[1]}" max="${params[2]}" onchange="${dialogName}Dialog.${params[0]}OnChange(this)">`;
 
     case 'P': // Password input
-      return `<input type="password" id="${params[0]}" class="form-control" maxlength="${params[1]}">`;
+      return `<input type="password" id="${dialogName}Dialog_${params[0]}" class="form-control" maxlength="${params[1]}">`;
 
     case 'A': // Textarea
-      return `<textarea id="${params[0]}" class="form-control" rows="${params[1]}" onchange="${dialogName}Dialog.${params[0]}OnChange"></textarea>`;
+      return `<textarea id="${dialogName}Dialog_${params[0]}" class="form-control" rows="${params[1]}" onchange="${dialogName}Dialog.${params[0]}OnChange(this)"></textarea>`;
 
     case 'B': // Button
-      return `<button id="${params[0]}" class="btn btn-primary" onclick="${dialogName}Dialog.${params[0]}OnClick">${params[1]}</button>`;
+      return `<button id="${dialogName}Dialog_${params[0]}" class="btn btn-primary" onclick="${dialogName}Dialog.${params[0]}OnClick(this)">${params[1]}</button>`;
 
     case 'X': // Checkbox
-      return `<input type="checkbox" id="${params[0]}" value="${params[0]}" class="form-check-input" onchange="${dialogName}Dialog.${params[0]}OnChange">`;
+      return `<input type="checkbox" id="${dialogName}Dialog_${params[0]}" value="${params[0]}" class="form-check-input" onchange="${dialogName}Dialog.${params[0]}OnChange(this)">`;
 
     case 'R': // Radio button
-      return `<input type="radio" id="${params[0]}" name="${params[1]}" value="${params[2]}" class="form-check-input" onchange="${dialogName}Dialog.${params[0]}OnChange">`;
+      return `<input type="radio" id="${dialogName}Dialog_${params[0]}" name="${dialogName}Dialog_${params[1]}" value="${params[2]}" class="form-check-input" onchange="${dialogName}Dialog.${params[0]}OnChange(this)">`;
 
     case 'D': // Dropdown list
-      return `<select id="${params[0]}" class="form-select" onchange="${dialogName}Dialog.${params[0]}OnChange">--Choose--</select>`;
+      return `<select id="${dialogName}Dialog_${params[0]}" class="form-select" onchange="${dialogName}Dialog.${params[0]}OnChange(this)"><option>--Choose--</option></select>`;
 
     default:
       return '';
@@ -114,68 +115,68 @@ function renderField(field) {
 }
 
 function renderCode(dialogName, fields) {
-  let code = `let ${dialogName}Dialog = {
-    id: "${dialogName}Modal",\n`;
+  let code = `const ${dialogName}Dialog = {
+    id: "${dialogName}Modal",`;
 
   // field declarations
   for (let field of fields) {
     let parts = field.split(':');
     let type = parts[0], params = parts[1].split(',');
     if (type != 'B') {
-      code += `${params[0]}:"",\n`;
+      code += `${params[0]}:"",`;
     }
   }
 
   // show/hide functions
-  code += `show: function() {`;
+  code += `\n  show: function() {\n`;
   for (let field of fields) {
     let parts = field.split(':');
     let type = parts[0], params = parts[1].split(','), id = params[0];
     switch (type) {
       case 'X':
-        code += `document.getElementById('${id}').checked = this.${id};\n`;
+        code += `    document.getElementById('${dialogName}Dialog_${id}').checked = this.${id};\n`;
         break;
       case 'R':
-        code += `document.getElementsByName('${params[1]}').forEach((el) => { el.checked = el.value === this.${id}; });\n`;
+        code += `    document.getElementsByName('${dialogName}Dialog_${params[1]}').forEach((el) => { el.checked = el.value === this.${id}; });\n`;
         break;
       case 'B':
         break;
       default:
-        code += `document.getElementById('${id}').value = this.${id};\n`;
+        code += `    document.getElementById('${dialogName}Dialog_${id}').value = this.${id};\n`;
         break;
     }
   }
-  code += `$('#' + this.id).modal('show');\n},\n`;
+  code += `    $('#' + this.id).modal('show');\n  },\n`;
 
-  code += `hide: function() {`;
+  code += `  hide: function() {\n`;
   for (let field of fields) {
     let parts = field.split(':');
     let type = parts[0], params = parts[1].split(','), id = params[0];
     switch (type) {
       case 'X':
-        code += `this.${id} = document.getElementById('${id}').checked;\n`;
+        code += `    this.${id} = document.getElementById('${dialogName}Dialog_${id}').checked;\n`;
         break;
       case 'R':
-        code += `this.${id} = document.querySelector('input[name="${params[1]}"]:checked').value;\n`;
+        code += `    this.${id} = document.querySelector('input[name="${dialogName}Dialog_${params[1]}"]:checked').value;\n`;
         break;
       case 'B':
         break;
       default:
-        code += `this.${id} = document.getElementById('${id}').value;\n`;
+        code += `    this.${id} = document.getElementById('${dialogName}Dialog_${id}').value;\n`;
         break;
     }
   }
-  code += `$('#' + this.id).modal('hide');\n},\n`;
+  code += `    $('#' + this.id).modal('hide');\n  },\n`;
 
   //   // Event Handler Functions
   for (let field of fields) {
     let parts = field.split(':');
     let type = parts[0], params = parts[1].split(','), id = params[0];
-    let suffix = (type == 'B') ? 'Click' : 'Change';
-    code += `${id}${suffix}: function (event) {\n},\n`;
+    let suffix = (type == 'B') ? 'OnClick' : 'OnChange';
+    code += `  ${id}${suffix}: function (event) {\n  },\n`;
   }
 
-  code += `};`
+  code += `};`;
 
   return code;
 }
