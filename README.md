@@ -26,7 +26,7 @@ Here is an example of DGen notationn that contains all supported form field type
 
 The above DGen notation will produce this:
 
-![feature X](vscode-dgen.png)
+![feature X](https://oddbeaker.com/vscode-ext/vscode-dgen.png)
 
 ---
 

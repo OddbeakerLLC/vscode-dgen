@@ -2,7 +2,7 @@
   "name": "dgen-dialog-generator",
   "displayName": "DGen Bootstrap Dialog Generator",
   "description": "Generates Bootstrap HTML and handler object from a very simple markup notation. Select the ",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "oddbeaker",
   "repository": {
     "type": "git",
