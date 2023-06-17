@@ -36,7 +36,7 @@ dgen.getCode = (content) => {
     output += (i < rows.length - 1) ? `</div>` : ``;
   }
   // finish off the html
-  output += `</div></div></div></div>\n`;
+  output += `</div></div></div>\n`;
 
   // now generate the dialog object
   output += `<script>\n${renderCode(dialogName, allFields)}\n</script>`;
