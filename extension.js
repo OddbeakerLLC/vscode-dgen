@@ -14,6 +14,8 @@ function activate(context) {
 
     editor.edit(editBuilder => {
       editBuilder.replace(editor.selection, generatedCode);
+    }).then(() => {
+      vscode.commands.executeCommand('editor.action.formatSelection');
     });
   });
 
