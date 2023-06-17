@@ -6,7 +6,7 @@
   "publisher": "oddbeaker",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tonymanso/vscode-dgen.git"
+    "url": "https://github.com/OddbeakerLLC/vscode-dgen.git"
   },
   "engines": {
     "vscode": "^1.78.0"
