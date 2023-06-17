@@ -2,8 +2,12 @@
   "name": "dgen-dialog-generator",
   "displayName": "DGen Bootstrap Dialog Generator",
   "description": "Generates Bootstrap HTML and handler object from a very simple markup notation. Select the ",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "publisher": "oddbeaker",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tonymanso/vscode-dgen.git"
+  },
   "engines": {
     "vscode": "^1.78.0"
   },
