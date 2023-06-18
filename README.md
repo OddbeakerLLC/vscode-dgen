@@ -101,6 +101,8 @@ That's it!
 
 ## Known Issues
 
+- Empty columns "{}" will not generate a column in the HTML. To force a column to be generated, put a space in between the curly brackets. "{ }"
+
 - There is absolutely no check for malformed DGen notation, and no proper error handling yet. 
 
 - Radio buttons work but the generated code needs improvement. Currently, it will generate an object property for each radio button with no regard to groups. Experiment with them before using them in production.

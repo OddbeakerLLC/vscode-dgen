@@ -14,7 +14,7 @@ dgen.getCode = (content) => {
   dialogName = toCamelCase(dialogTitle);
 
   // initialize the dialog
-  output = `<div class="modal" tabindex="-1" role="dialog" id="${dialogName}Modal" data-backdrop="static"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">${dialogTitle}</h5></div><div class="modal-body">`;
+  output = `<div class="modal" tabindex="-1" role="dialog" id="${dialogName}Modal" data-backdrop="static"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">${dialogTitle}</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div><div class="modal-body">`;
 
   // render rows
   for (let i = 0; i < rows.length; i++) {
